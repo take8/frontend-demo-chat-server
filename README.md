@@ -16,3 +16,9 @@ firebase login
 ```sh
 firebase init hosting
 ```
+
+### Functions の設定
+
+```sh
+firebase init functions
+```
