@@ -2,6 +2,7 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 
 import * as Koa from 'koa';
+import * as Router from 'koa-router';
 import * as cors from '@koa/cors';
 
 // // Start writing Firebase Functions
@@ -14,6 +15,7 @@ import * as cors from '@koa/cors';
 admin.initializeApp(functions.config().firebase());
 
 const app = new Koa();
+const router = new Router();
 app.use(cors());
 
 interface UserInterface {
@@ -51,3 +53,43 @@ const checkUser = async (ctx: Koa.Context, next: Function) => {
 }
 
 app.use(checkUser);
+
+function createChannel(channelName: string) {
+  const channelRef = admin.database().ref("channels");
+  const date1 = new Date();
+  const date2 = new Date();
+  date2.setSeconds(date2.getSeconds() + 1);
+  const defaultData = `{
+    "messages": {
+      "1": {
+        "body": "Welcome to #${channelName} channel!",
+        "date": "${date1.toJSON()}",
+        "user": {
+          "avatar": "",
+          "id": "robot",
+          "name": "Robot"
+        }
+      },
+      "2": {
+        "body": "はじめてのメッセージを投稿してみましょう。",
+        "date": "${date2.toJSON()}",
+        "user": {
+          "avatar": "",
+          "id": "robot",
+          "name": "Robot"
+        }
+      }
+    }
+  }`;
+
+  // "/channels/:channelName"
+  channelRef.child(channelName).set(JSON.parse(defaultData));
+}
+
+router.post("/channels", (ctx: Koa.Context) => {
+  const channelName = ctx.request.body.channelName;
+  createChannel(channelName);
+  ctx.response.header.set("Content-Type", "application/json; charset=utf-8");
+  ctx.status = 201;
+  ctx.json({ result: "ok" });
+});
