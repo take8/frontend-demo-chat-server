@@ -24,6 +24,12 @@ interface UserInterface {
   avatar: string
 }
 
+interface MessageInterface {
+  date: string,
+  body: string,
+  user: UserInterface
+}
+
 const anonymousUser: UserInterface = {
   id: "anon",
   name: "Anonymous",
@@ -89,7 +95,7 @@ function createChannel(channelName: string) {
 router.post("/channels", (ctx: Koa.Context) => {
   const channelName = ctx.request.body.channelName;
   createChannel(channelName);
-  ctx.response.header.set("Content-Type", "application/json; charset=utf-8");
+  ctx.type = "application/json; charset=utf-8";
   ctx.status = 201;
   ctx.json({ result: "ok" });
 });
@@ -102,7 +108,21 @@ router.get("/channels", (ctx: Koa.Context) => {
       const channelName = childSnapshot.key;
       items.push(channelName);
     });
-    ctx.response.header.set("Content-Type", "application/json; charset=utf-8");
+    ctx.type = "application/json; charset=utf-8";
     ctx.json({ channels: items });
   });
+});
+
+router.post("/channels/:channelName/messages", (ctx: Koa.Context) => {
+  const channelName = ctx.params.channelName;
+  const message: MessageInterface = {
+    date: new Date().toJSON(),
+    body: ctx.request.body.body,
+    user: ctx.user
+  };
+  const messageRef = admin.database().ref(`channels/${channelName}/messages`);
+  messageRef.push(message);
+  ctx.type = "application/json; charset=utf-8";
+  ctx.status = 201;
+  ctx.json({ result: "ok" });
 });
