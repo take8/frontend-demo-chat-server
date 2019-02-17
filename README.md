@@ -15,6 +15,7 @@ firebase login
 
 ```sh
 firebase init hosting
+# firebase use --add frontend-demo-chat
 ```
 
 ### Functions の設定
