@@ -153,3 +153,9 @@ router.post("/reset", (ctx: Koa.Context) => {
   ctx.status = 201;
   ctx.json({ result: "ok" });
 });
+
+app.use(router.routes());
+app.use(router.allowedMethods());
+
+// app を外部から呼び出せるようにする
+exports.v1 = functions.https.onRequest(app.callback());
