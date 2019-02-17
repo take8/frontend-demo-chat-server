@@ -126,3 +126,22 @@ router.post("/channels/:channelName/messages", (ctx: Koa.Context) => {
   ctx.status = 201;
   ctx.json({ result: "ok" });
 });
+
+router.get("/channels/:channelName/messages", (ctx: Koa.Context) => {
+  const channelName = ctx.params.channelName;
+  const messageRef = admin.database().ref(`channels/${channelName}/messages`)
+      .orderByChild("date")
+      // 最後から20件
+      .limitToLast(20);
+  messageRef.once("value", snapshot => {
+    let items = new Array();
+    snapshot.forEach(childSnapshot => {
+      const message = childSnapshot.val();
+      message.id = childSnapshot.key;
+      items.push(message);
+    });
+    items.reverse();
+    ctx.type = "application/json; charset=utf-8";
+    ctx.json({ messages: items });
+  });
+});
