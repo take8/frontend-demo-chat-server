@@ -145,3 +145,11 @@ router.get("/channels/:channelName/messages", (ctx: Koa.Context) => {
     ctx.json({ messages: items });
   });
 });
+
+router.post("/reset", (ctx: Koa.Context) => {
+  createChannel("general");
+  createChannel("random");
+  ctx.type = "application/json; charset=utf-8";
+  ctx.status = 201;
+  ctx.json({ result: "ok" });
+});
