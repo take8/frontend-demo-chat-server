@@ -93,3 +93,16 @@ router.post("/channels", (ctx: Koa.Context) => {
   ctx.status = 201;
   ctx.json({ result: "ok" });
 });
+
+router.get("/channels", (ctx: Koa.Context) => {
+  const channelRef = admin.database().ref("channels");
+  channelRef.once("value", snapshot => {
+    let items = new Array();
+    snapshot.forEach(childSnapshot => {
+      const channelName = childSnapshot.key;
+      items.push(channelName);
+    });
+    ctx.response.header.set("Content-Type", "application/json; charset=utf-8");
+    ctx.json({ channels: items });
+  });
+});
