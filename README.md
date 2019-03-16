@@ -23,3 +23,11 @@ firebase init hosting
 ```sh
 firebase init functions
 ```
+
+参考: [Cloud Functions に TypeScript を使用する](https://firebase.google.com/docs/functions/typescript?hl=ja)
+
+```sh
+cd functions
+npm run build
+firebase serve --only functions
+```
