@@ -31,3 +31,9 @@ cd functions
 npm run build
 firebase serve --only functions
 ```
+
+### Functions の公開
+
+```sh
+firebase deploy --only functions
+```

@@ -41,7 +41,7 @@ const checkUser = async (req: Express.Request, res: Express.Response, next: Expr
 
     const decodedIdTaken = await admin.auth().verifyIdToken(idToken)
     .catch(async error => {
-      await next();
+      next();
       throw error;
     });
     const authUser: UserInterface = {
@@ -51,9 +51,9 @@ const checkUser = async (req: Express.Request, res: Express.Response, next: Expr
     };
     // TODO: bodyに格納するやり方でいいのか?
     req.body.user = authUser;
-    await next();
+    next();
   } else {
-    await next();
+    next();
   }
 }
 
