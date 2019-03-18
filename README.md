@@ -37,3 +37,7 @@ firebase serve --only functions
 ```sh
 firebase deploy --only functions
 ```
+
+## CI設定
+
+参考: [CircleCiとFireBaseを連携させるのに4時間かかった](https://qiita.com/hp_kj/items/bcf553715b1e441c216f)
