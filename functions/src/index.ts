@@ -35,7 +35,7 @@ const anonymousUser: UserInterface = {
 };
 
 const checkUser = async (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
-  req.user = anonymousUser;
+  req.body.user = anonymousUser;
   if (req.query.auth_token !== undefined) {
     const idToken = req.query.auth_token;
 
@@ -49,7 +49,8 @@ const checkUser = async (req: Express.Request, res: Express.Response, next: Expr
       name: decodedIdTaken.name,
       avatar: decodedIdTaken.picture
     };
-    req.user = authUser;
+    // TODO: bodyに格納するやり方でいいのか?
+    req.body.user = authUser;
     await next();
   } else {
     await next();
@@ -115,7 +116,7 @@ router.post("/channels/:channelName/messages", (req: Express.Request, res: Expre
   const message: MessageInterface = {
     date: new Date().toJSON(),
     body: req.body.body,
-    user: req.user
+    user: req.body.user
   };
   const messageRef = admin.database().ref(`channels/${channelName}/messages`);
   messageRef.push(message);
