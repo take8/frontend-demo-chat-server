@@ -16,23 +16,27 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-{{ checksum "~/repo/functions/package.json" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: npm install
+      - run: 
+          working_directory: ~/repo/functions
+          command: npm install
 
       - run:
           name: 'Install Dependecies'
+          working_directory: ~/repo/functions
           command: npm install --save-dev firebase-tools
 
       - save_cache:
           paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+            - ~/repo/functions/node_modules
+          key: v1-dependencies-{{ checksum "~/repo/functions/package.json" }}
 
       - run:
           name: 'Build Client Code'
+          working_directory: ~/repo/functions
           command: npm run build
 
       - attach_workspace:
@@ -40,4 +44,5 @@ jobs:
 
       - run:
           name: 'Deploy to Hosting'
-          command: node_modules/.bin/firebase deploy --only hosting --project "$FIREBASE_PJ" --token "$FIREBASE_TOKEN"
+          working_directory: ~/repo/functions
+          command: node_modules/.bin/firebase deploy --only functions --project "$FIREBASE_PJ" --token "$FIREBASE_TOKEN"
