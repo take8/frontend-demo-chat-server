@@ -1,6 +1,17 @@
 # Frontendデモ - チャットサーバ
 
-## CLI
+## 参考
+
+書籍"React，Angular，Vue.js，React Nativeを使って学ぶ はじめてのフロントエンド開発"
+
+## アーキテクチャ
+
+* Language: Node.js
+* FW: Express
+* BaaS: Firebase
+* CI: CircleCI
+
+## CLI(Firebase)
 
 ```sh
 npm i -g firebase-tools
