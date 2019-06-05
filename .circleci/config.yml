@@ -1,0 +1,48 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "~/repo/functions/package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run: 
+          working_directory: ~/repo/functions
+          command: npm install
+
+      - run:
+          name: 'Install Dependecies'
+          working_directory: ~/repo/functions
+          command: npm install --save-dev firebase-tools
+
+      - save_cache:
+          paths:
+            - ~/repo/functions/node_modules
+          key: v1-dependencies-{{ checksum "~/repo/functions/package.json" }}
+
+      - run:
+          name: 'Build Client Code'
+          working_directory: ~/repo/functions
+          command: npm run build
+
+      - attach_workspace:
+          at: .
+
+      - run:
+          name: 'Deploy to Hosting'
+          working_directory: ~/repo/functions
+          command: node_modules/.bin/firebase deploy --only functions --project "$FIREBASE_PJ" --token "$FIREBASE_TOKEN"
