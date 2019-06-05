@@ -1,15 +1,15 @@
-# Frontendデモ - チャットサーバ
+# Frontend デモ - チャットサーバ
 
 ## 参考
 
-書籍"React，Angular，Vue.js，React Nativeを使って学ぶ はじめてのフロントエンド開発"
+書籍"React，Angular，Vue.js，React Native を使って学ぶ はじめてのフロントエンド開発"
 
 ## アーキテクチャ
 
-* Language: Node.js
-* FW: Express
-* BaaS: Firebase
-* CI: CircleCI
+- Language: Node.js
+- FW: Express
+- BaaS: Firebase
+- CI: CircleCI
 
 ## CLI(Firebase)
 
@@ -49,14 +49,14 @@ firebase serve --only functions
 firebase deploy --only functions
 ```
 
-## CI設定
+## CI 設定
 
-参考: [CircleCiとFireBaseを連携させるのに4時間かかった](https://qiita.com/hp_kj/items/bcf553715b1e441c216f)
+参考: [CircleCi と FireBase を連携させるのに 4 時間かかった](https://qiita.com/hp_kj/items/bcf553715b1e441c216f)
 
-### CircleCI CLIを使うべし(CircleCI 2.0から)
+### CircleCI CLI を使うべし(CircleCI 2.0 から)
 
-動作検証するのにいちいちGitHubでプッシュとかやってられないので、
-`circleci`(CircleCI CLI)を使うべし(CircleCI 2.0から)。
+動作検証するのにいちいち GitHub でプッシュとかやってられないので、
+`circleci`(CircleCI CLI)を使うべし(CircleCI 2.0 から)。
 
 ```sh
 curl -fLSs https://circle.ci/cli | bash
@@ -65,13 +65,12 @@ circleci config validate -c .circleci/config.yml
 ```
 
 ローカルでビルドする
-
 **注意点**
 
-* 環境変数を指定するときは `-e` オプションを使うこと
+- 環境変数を指定するときは `-e` オプションを使うこと
   `circleci build .circleci/config.yml -e VAR=VAL` みたいに書く必要がある
-* circleci CLIは Workflowsに対応していない
-* `restore_cache`, `save_cache` が使えない
+- circleci CLI は Workflows に対応していない
+- `restore_cache`, `save_cache` が使えない
 
 ```sh
 circleci build
